@@ -20,11 +20,27 @@ int paranthasByCook(int rank, int time) {
 	return n - 1;
 }
 
-// O(l * sqrt(time))
+// log(time)
+// binary search for parathas
+int paranthasByCookBinarySearch(int rank, int time) {
+	int left = 0, right = time;
+	while (left < right) {
+		int mid = (left + right) / 2;
+		if (rank * mid * (mid + 1) <= 2 * time) {
+			left = mid + 1;
+		}
+		else {
+			right = mid;
+		}
+	}
+	return left - 1;
+}
+
+// O(l * log(time))
 int getTotalParathas(int cook[], int l, int time) {
 	int paranthas = 0;
 	for (int i = 0; i < l; i++) {
-		paranthas += paranthasByCook(cook[i], time);
+		paranthas += paranthasByCookBinarySearch(cook[i], time);
 	}
 	return paranthas;
 }
@@ -46,10 +62,10 @@ void solve() {
 	// 	}
 	// }
 
-	// lower bound
+	// lower bound for time
 	int left = 0, right = 1e7;
 
-	// O(l * sqrt(time) * log(1e7))
+	// O(l * log(time) * log(1e7))
 	while (left < right) {
 		int mid = (left + right) / 2;
 		if (getTotalParathas(cook, l, mid) >= p) {
